@@ -5,14 +5,22 @@ import CartItem from "./CartItem/CartItem";
 
 export default function CartScreen(props) {
 
+  let emptyProduct = {
+    "id": 0,
+    "name": "Out of stock",
+    "imageUrl": "",
+    "price": 0,
+    "quantity": 0,
+    "description": "Item is not available"
+  }
+
   let totalQuantity = props.cartItems.reduce((sum, item) => sum + item.quantity, 0);
   let itemsPrice = props.cartItems
-    .map(item => props.products
-      .find(product => product.id === item.id).price)
+    .map(item => (props.products.find(product => product.id === item.id) || emptyProduct).price)
     .reduce((sum, price) => sum + price, 0);
   let totalPrice = props.cartItems
-    .map(item => item.quantity * props.products
-      .find(product => product.id === item.id).price)
+    .map(item => item.quantity * (props.products
+      .find(product => product.id === item.id) || emptyProduct).price || 0)
     .reduce((sum, price) => sum + price, 0);
 
   return (
@@ -38,7 +46,7 @@ export default function CartScreen(props) {
                   key={item.id}
                   item={item}
                   addRemoveItem={props.addRemoveItem}
-                  product={props.products.find(product => product.id === item.id)}
+                  product={props.products.find(product => product.id === item.id) || emptyProduct}
                   updateQuantity={props.updateQuantity}
                 />
               )}

@@ -38,7 +38,7 @@ export default function RouteHandler(props) {
           updateQuantity={props.updateQuantity}
         />
       </Route>
-      <Route path="/admin/add">
+      <Route exact path="/admin/add">
         <AdminAdd
           products={props.products}
           addNewProduct={props.addNewProduct}
@@ -47,6 +47,7 @@ export default function RouteHandler(props) {
       <Route path="/admin/edit/">
         <AdminEdit
           editProduct={props.editProduct}
+          deleteProduct={props.deleteProduct}
         />
       </Route>
     </Switch>

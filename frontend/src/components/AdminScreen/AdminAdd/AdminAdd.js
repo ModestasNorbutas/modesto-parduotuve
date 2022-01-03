@@ -1,11 +1,14 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import { Container, Card, Row } from "react-bootstrap";
 import "./AdminAdd.css"
 
 export default function AdminAdd(props) {
 
+  const history = useHistory();
+
   const [formData, setFormData] = useState({
-    "id": (props.products.length + 1),
+    "id": (props.products[props.products.length - 1].id + 1),
     "name": "",
     "imageUrl": "",
     "price": "",
@@ -22,8 +25,7 @@ export default function AdminAdd(props) {
     }))
   }
 
-  function handleSubmit(event) {
-    event.preventDefault();
+  function handleSubmit() {
     props.addNewProduct(formData);
     setFormData(prevData => ({ ...prevData, "id": prevData.id + 1 }));
     alert("Product Added");
@@ -34,7 +36,7 @@ export default function AdminAdd(props) {
       <Row className="row justify-content-center">
         <Card className="col admin-add">
           <h4>New product id: {formData.id}</h4>
-          <form>
+          <div>
             <div className="form-group">
               <label htmlFor="name">Product name:</label>
               <input
@@ -100,7 +102,13 @@ export default function AdminAdd(props) {
             >
               Add product
             </button>
-          </form>
+            <button
+              className="btn btn-primary"
+              onClick={() => history.push("/admin")}
+            >
+              Cancel
+            </button>
+          </div>
         </Card>
       </Row>
     </Container>

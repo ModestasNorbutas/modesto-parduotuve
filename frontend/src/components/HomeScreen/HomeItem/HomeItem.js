@@ -19,6 +19,7 @@ export default function HomeItem(props) {
         variant="top"
         className="home-item--image"
         src={imageUrl}
+        alt={name}
       />
       <Card.Body>
         <Card.Title>{name}</Card.Title>

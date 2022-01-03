@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
+import { } from "react-router-dom";
 import { Container, Card, Row } from "react-bootstrap";
 import "./AdminEdit.css"
 
 export default function AdminEdit(props) {
 
   const location = useLocation();
+  const history = useHistory();
 
   const [formData, setFormData] = useState(location.state.params)
 
@@ -16,6 +18,17 @@ export default function AdminEdit(props) {
         isNaN(event.target.valueAsNumber) ? 0 : event.target.valueAsNumber :
         event.target.value
     }))
+  }
+
+  function handleEdit() {
+    props.editProduct(formData);
+    alert("Product edited");
+  }
+
+  function handleDelete() {
+    props.deleteProduct(formData.id);
+    history.push("/admin");
+    alert("Product deleted");
   }
 
   return (
@@ -37,7 +50,7 @@ export default function AdminEdit(props) {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="imageUrl">Image URL:</label>
+              <label htmlFor="imageUrl">Image URL, pvz.: https://picsum.photos/200/100</label>
               <input
                 name="imageUrl"
                 value={formData.imageUrl}
@@ -85,9 +98,21 @@ export default function AdminEdit(props) {
             <button
               type="submit"
               className="btn btn-success"
-              onClick={() => props.editProduct(formData)}
+              onClick={handleEdit}
             >
               Edit Product
+            </button>
+            <button
+              className="btn btn-danger"
+              onClick={handleDelete}
+            >
+              Delete product
+            </button>
+            <button
+              className="btn btn-primary"
+              onClick={() => history.push("/admin")}
+            >
+              Cancel
             </button>
           </div>
         </Card>

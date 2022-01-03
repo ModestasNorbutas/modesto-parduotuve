@@ -68,6 +68,11 @@ export default function App() {
     ))
   }
 
+  function deleteProduct(productId) {
+    setProducts(prevProducts =>
+      prevProducts.filter(product => product.id !== productId));
+  }
+
   return (
     <BrowserRouter>
       <div className="background">
@@ -84,6 +89,7 @@ export default function App() {
           addNewProduct={addNewProduct}
           editProduct={editProduct}
           updateQuantity={updateQuantity}
+          deleteProduct={deleteProduct}
         />
       </div>
     </BrowserRouter>
