@@ -1,0 +1,11 @@
+.cart-screen {
+  margin: 1rem;
+  padding: 1rem;
+  align-items: center;
+}
+
+tr, th {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}

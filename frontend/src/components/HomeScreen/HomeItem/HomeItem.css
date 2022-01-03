@@ -1,0 +1,13 @@
+.home-item {
+  width: 18rem;
+  margin: 1rem auto;
+  text-align: center;
+}
+
+.home-item--description {
+  text-align: justify;
+}
+
+.home-item--image {
+  max-height: 150px;
+}

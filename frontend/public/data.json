@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "name": "Beatiful RGB",
+    "imageUrl": "https://picsum.photos/202/101",
+    "price": 560,
+    "quantity": 10,
+    "description": "This is a beautiful picture, created by talented atrists"
+  },
+  {
+    "id": 2,
+    "name": "Amazing Picture",
+    "imageUrl": "https://picsum.photos/204/102",
+    "price": 856,
+    "quantity": 8,
+    "description": "This is a beautiful picture, created by talented atrists"
+  },
+  {
+    "id": 3,
+    "name": "Creative Image",
+    "imageUrl": "https://picsum.photos/206/103",
+    "price": 123,
+    "quantity": 10,
+    "description": "This is a beautiful picture, created by talented atrists"
+  },
+  {
+    "id": 4,
+    "name": "Undescribable",
+    "imageUrl": "https://picsum.photos/208/104",
+    "price": 999,
+    "quantity": 7,
+    "description": "This is a beautiful picture, created by talented atrists"
+  },
+  {
+    "id": 5,
+    "name": "Inspiration",
+    "imageUrl": "https://picsum.photos/210/105",
+    "price": 610,
+    "quantity": 10,
+    "description": "This is a beautiful picture, created by talented atrists"
+  },
+  {
+    "id": 6,
+    "name": "Foo bar",
+    "imageUrl": "https://picsum.photos/212/106",
+    "price": 370,
+    "quantity": 3,
+    "description": "This is a beautiful picture, created by talented atrists"
+  },
+  {
+    "id": 7,
+    "name": "Unbelievable Art",
+    "imageUrl": "https://picsum.photos/214/107",
+    "price": 593,
+    "quantity": 4,
+    "description": "This is a beautiful picture, created by talented atrists"
+  },
+  {
+    "id": 8,
+    "name": "Inside Artists Head",
+    "imageUrl": "https://picsum.photos/216/108",
+    "price": 760,
+    "quantity": 2,
+    "description": "This is a beautiful picture, created by talented atrists"
+  }
+]
