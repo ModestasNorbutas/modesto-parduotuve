@@ -4,7 +4,7 @@ import { } from "react-router-dom";
 import { Container, Card, Row } from "react-bootstrap";
 import "./AdminEdit.css"
 
-export default function AdminEdit(props) {
+export default function AdminEdit() {
 
   const location = useLocation();
   const history = useHistory();
@@ -21,14 +21,17 @@ export default function AdminEdit(props) {
   }
 
   function handleEdit() {
-    props.editProduct(formData);
-    alert("Product edited");
+    fetch("http://localhost:8080/api/products/edit", {
+      method: "PUT",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(formData)
+    }).then(response => response.json()).then(data => alert("Product edited: " + JSON.stringify(data)));
   }
 
   function handleDelete() {
-    props.deleteProduct(formData.id);
-    history.push("/admin");
-    alert("Product deleted");
+    fetch(`http://localhost:8080/api/products/${formData.id}`, { method: "DELETE" })
+      .then(setTimeout(() => { history.push("/admin") }, 1000))
+      .then(response => alert("Product deleted: " + JSON.stringify(response)));
   }
 
   return (

@@ -24,11 +24,9 @@ export default function RouteHandler(props) {
           handleLogin={props.handleLogin}
         />
       </Route>
-      <Route exact path="/admin">
-        <AdminScreen
-          products={props.products}
-        />
-      </Route>
+      <Route exact path="/admin" component={AdminScreen} />
+      <Route exact path="/admin/add" component={AdminAdd} />
+      <Route path="/admin/edit/" component={AdminEdit} />
       <Route exact path="/cart">
         <CartScreen
           cartItems={props.cartItems}
@@ -36,18 +34,6 @@ export default function RouteHandler(props) {
           addRemoveItem={props.addRemoveItem}
           username={props.username}
           updateQuantity={props.updateQuantity}
-        />
-      </Route>
-      <Route exact path="/admin/add">
-        <AdminAdd
-          products={props.products}
-          addNewProduct={props.addNewProduct}
-        />
-      </Route>
-      <Route path="/admin/edit/">
-        <AdminEdit
-          editProduct={props.editProduct}
-          deleteProduct={props.deleteProduct}
         />
       </Route>
     </Switch>

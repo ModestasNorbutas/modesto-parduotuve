@@ -18,10 +18,14 @@ export default function App() {
   }]);
 
   useEffect(() => {
-    fetch("./data.json")
+    updateProducts();
+  }, []);
+
+  function updateProducts() {
+    fetch("http://localhost:8080/api/products")
       .then(response => response.json())
       .then(data => setProducts(data));
-  }, []);
+  }
 
   function handleLogin(event, newUser) {
     event.preventDefault();
@@ -58,21 +62,6 @@ export default function App() {
       item.id === itemId ? { "id": itemId, "quantity": newQuantity } : item))
   }
 
-  function addNewProduct(product) {
-    setProducts(prevProducts => [...prevProducts, product])
-  }
-
-  function editProduct(editedProduct) {
-    setProducts(prevProducts => prevProducts.map(product =>
-      product.id === editedProduct.id ? editedProduct : product
-    ))
-  }
-
-  function deleteProduct(productId) {
-    setProducts(prevProducts =>
-      prevProducts.filter(product => product.id !== productId));
-  }
-
   return (
     <BrowserRouter>
       <div className="background">
@@ -86,10 +75,7 @@ export default function App() {
           handleLogin={handleLogin}
           username={user.username}
           products={products}
-          addNewProduct={addNewProduct}
-          editProduct={editProduct}
           updateQuantity={updateQuantity}
-          deleteProduct={deleteProduct}
         />
       </div>
     </BrowserRouter>

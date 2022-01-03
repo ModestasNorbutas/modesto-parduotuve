@@ -3,12 +3,11 @@ import { useHistory } from "react-router-dom";
 import { Container, Card, Row } from "react-bootstrap";
 import "./AdminAdd.css"
 
-export default function AdminAdd(props) {
+export default function AdminAdd() {
 
   const history = useHistory();
 
   const [formData, setFormData] = useState({
-    "id": (props.products[props.products.length - 1].id + 1),
     "name": "",
     "imageUrl": "",
     "price": "",
@@ -25,17 +24,19 @@ export default function AdminAdd(props) {
     }))
   }
 
-  function handleSubmit() {
-    props.addNewProduct(formData);
-    setFormData(prevData => ({ ...prevData, "id": prevData.id + 1 }));
-    alert("Product Added");
+  function addNewProduct() {
+    fetch("http://localhost:8080/api/products/add", {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(formData)
+    }).then(response => response.json()).then(data => alert("Product added: " + JSON.stringify(data)));
   }
 
   return (
     <Container>
       <Row className="row justify-content-center">
         <Card className="col admin-add">
-          <h4>New product id: {formData.id}</h4>
+          <h4>New product</h4>
           <div>
             <div className="form-group">
               <label htmlFor="name">Product name:</label>
@@ -98,7 +99,7 @@ export default function AdminAdd(props) {
             <button
               type="submit"
               className="btn btn-success"
-              onClick={handleSubmit}
+              onClick={addNewProduct}
             >
               Add product
             </button>
