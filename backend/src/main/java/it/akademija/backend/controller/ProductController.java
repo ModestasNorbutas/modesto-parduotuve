@@ -26,7 +26,7 @@ public class ProductController {
 
     @GetMapping("products")
     public List<Product> getAllProducts() {
-	return this.productRepository.findAll();
+	return productRepository.findAll();
     }
 
     @GetMapping("products/{productId}")
@@ -36,19 +36,21 @@ public class ProductController {
     }
 
     @DeleteMapping("products/{productId}")
-    public String deleteProduct(@PathVariable Integer productId) {
+    public List<Product> deleteProduct(@PathVariable Integer productId) {
 	productRepository.deleteById(productId);
-	return "Product #" + productId + " deleted";
+	return productRepository.findAll();
     }
 
     @PostMapping("products/add")
-    public Product addProduct(@RequestBody Product product) {
-	return productRepository.save(product);
+    public List<Product> addProduct(@RequestBody Product product) {
+	productRepository.save(product);
+	return productRepository.findAll();
     }
 
     @PutMapping("products/edit")
-    public Product editProduct(@RequestBody Product product) {
-	return productRepository.save(product);
+    public List<Product> editProduct(@RequestBody Product product) {
+	productRepository.save(product);
+	return productRepository.findAll();
     }
 
 }

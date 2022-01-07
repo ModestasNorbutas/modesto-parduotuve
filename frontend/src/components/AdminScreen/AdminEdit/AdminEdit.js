@@ -4,13 +4,14 @@ import { } from "react-router-dom";
 import { Container, Card, Row } from "react-bootstrap";
 import "./AdminEdit.css"
 import { ProductContext } from "../../Context/ProductContext";
+import axios from "axios";
 
 export default function AdminEdit() {
 
   const location = useLocation();
   const history = useHistory();
 
-  const { updateProducts } = useContext(ProductContext);
+  const { setProducts } = useContext(ProductContext);
   const [formData, setFormData] = useState(location.state.params)
 
   function handleChange(event) {
@@ -23,19 +24,16 @@ export default function AdminEdit() {
   }
 
   function deleteProduct() {
-    fetch(`http://localhost:8080/api/products/${formData.id}`, { method: "DELETE" })
-      .then(alert("Delete request sent"))
-      .then(updateProducts(prevState => prevState + 1))
+    axios.delete(`http://localhost:8080/api/products/${formData.id}`)
+      .then(response => setProducts(response.data))
+      .catch(error => alert(error))
       .then(history.push("/admin"));
   }
 
   function editProduct() {
-    fetch("http://localhost:8080/api/products/edit", {
-      method: "PUT",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify(formData)
-    }).then(alert("Edit request sent"))
-      .then(updateProducts(prevState => prevState + 1))
+    axios.put("http://localhost:8080/api/products/edit", formData)
+      .then(response => setProducts(response.data))
+      .catch(error => alert(error))
       .then(history.push("/admin"));
   }
 

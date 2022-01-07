@@ -3,11 +3,12 @@ import { Button } from "react-bootstrap";
 import { UserContext } from "../../Context/UserContext";
 import { CartContext } from "../../Context/CartContext";
 import "./CartItem.css";
+import axios from "axios";
 
 export default function CartItem(props) {
 
   const { user } = useContext(UserContext);
-  const { updateCart } = useContext(CartContext);
+  const { setCartItems } = useContext(CartContext);
   const [chosenQty, setChosenQty] = useState(props.item.quantity)
 
   function handleChange(event) {
@@ -22,17 +23,16 @@ export default function CartItem(props) {
   }
 
   function updateQuantity() {
-    let newCartItem = { "productId": props.product.id, "quantity": chosenQty };
-    fetch(`http://localhost:8080/${user.username}/cart`, {
-      method: "PUT",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify(newCartItem)
-    }).then(updateCart(prevState => prevState + 1));
+    let newCartItem = { "productId": props.item.productId, "quantity": chosenQty };
+    axios.put(`http://localhost:8080/${user.username}/cart`, newCartItem)
+      .then(response => setCartItems(response.data))
+      .catch(error => alert(error));
   }
 
   function removeItem() {
-    fetch(`http://localhost:8080/${user.username}/${props.product.id}`,
-      { method: "DELETE" }).then(updateCart(prevState => prevState + 1));
+    axios.delete(`http://localhost:8080/${user.username}/${props.item.productId}`)
+      .then(response => setCartItems(response.data))
+      .catch(error => alert(error));
   }
 
   return (

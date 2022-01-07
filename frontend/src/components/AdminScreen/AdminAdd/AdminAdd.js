@@ -3,12 +3,13 @@ import { useHistory } from "react-router-dom";
 import { Container, Card, Row } from "react-bootstrap";
 import "./AdminAdd.css"
 import { ProductContext } from "../../Context/ProductContext";
+import axios from "axios";
 
 export default function AdminAdd() {
 
   const history = useHistory();
 
-  const { updateProducts } = useContext(ProductContext);
+  const { setProducts } = useContext(ProductContext);
 
   const [formData, setFormData] = useState({
     "name": "",
@@ -28,13 +29,10 @@ export default function AdminAdd() {
   }
 
   function addNewProduct() {
-    fetch("http://localhost:8080/api/products/add", {
-      method: "POST",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify(formData)
-    }).then(alert("Add request sent"))
-      .then(updateProducts(prevState => prevState + 1))
-      .then(history.push("/admin"))
+    axios.post("http://localhost:8080/api/products/add", formData)
+      .then(response => setProducts(response.data))
+      .catch(error => alert(error))
+      .then(history.push("/admin"));
   }
 
   return (

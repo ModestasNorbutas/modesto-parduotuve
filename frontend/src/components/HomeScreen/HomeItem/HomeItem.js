@@ -3,11 +3,12 @@ import { Card, Button } from "react-bootstrap";
 import "./HomeItem.css";
 import { CartContext } from "../../Context/CartContext";
 import { UserContext } from "../../Context/UserContext";
+import axios from "axios";
 
 export default function HomeItem(props) {
 
   const { user } = useContext(UserContext);
-  const { cartItems, updateCart } = useContext(CartContext);
+  const { cartItems, setCartItems } = useContext(CartContext);
   const { id, imageUrl, name, description, price } = props.product;
   const isInCart = cartItems.filter(item => item.productId === props.product.id).length > 0 ? true : false;
 
@@ -18,14 +19,13 @@ export default function HomeItem(props) {
 
   function addRemoveItem() {
     if (isInCart) {
-      fetch(`http://localhost:8080/${user.username}/${id}`,
-        { method: "DELETE" }).then(updateCart(prevState => prevState + 1));
+      axios.delete(`http://localhost:8080/${user.username}/${id}`)
+        .then(response => setCartItems(response.data))
+        .catch(error => alert(error));
     } else {
-      fetch(`http://localhost:8080/${user.username}/cart`, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(cartItem)
-      }).then(updateCart(prevState => prevState + 1));
+      axios.post(`http://localhost:8080/${user.username}/cart`, cartItem)
+        .then(response => setCartItems(response.data))
+        .catch(error => alert(error));
     }
   }
 
