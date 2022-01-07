@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Container, Table, Row, Card, Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import "./AdminScreen.css"
 import AdminItem from "./AdminItem/AdminItem";
+import { ProductContext } from "../Context/ProductContext";
 
 
-export default function AdminScreen(props) {
+export default function AdminScreen() {
+
+  const { products } = useContext(ProductContext);
 
   let history = useHistory();
 
@@ -33,7 +36,7 @@ export default function AdminScreen(props) {
               </tr>
             </thead>
             <tbody>
-              {props.products.map(product =>
+              {products.map(product =>
                 <AdminItem
                   key={product.id}
                   product={product}

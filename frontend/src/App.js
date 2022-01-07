@@ -1,105 +1,37 @@
-import React, { useState, useEffect } from "react";
-import { BrowserRouter } from "react-router-dom";
-
+import React from "react";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import NavigationBar from "./components/NavigationBar/NavigationBar";
-import RouteHandler from "./components/RouteHandler/RouteHandler";
+import HomeScreen from "./components/HomeScreen/HomeScreen";
+import Login from "./components/Login/Login";
+import AdminScreen from "./components/AdminScreen/AdminScreen";
+import CartScreen from "./components/CartScreen/CartScreen";
+import AdminAdd from "./components/AdminScreen/AdminAdd/AdminAdd"
+import AdminEdit from "./components/AdminScreen/AdminEdit/AdminEdit";
+import { ProductProvider } from "./components/Context/ProductContext";
+import { UserProvider } from "./components/Context/UserContext";
+import { CartProvider } from "./components/Context/CartContext";
 
 export default function App() {
 
-  const [products, setProducts] = useState([]);
-  const [user, setUser] = useState({
-    "username": "Anonymous",
-    "password": ""
-  });
-  const [cartItems, setCartItems] = useState([]);
-
-  useEffect(() => {
-    getProducts();
-  }, []);
-
-  useEffect(() => {
-    getCart();
-  }, [user.username])
-
-  function getProducts() {
-    fetch("http://localhost:8080/api/products")
-      .then(response => response.json())
-      .then(data => setProducts(data));
-  }
-
-  function getCart() {
-    fetch(`http://localhost:8080/${user.username}/cart`)
-      .then(response => response.json())
-      .then(data => setCartItems(data));
-  }
-
-  function handleLogin(event, newUser) {
-    event.preventDefault();
-    setUser(newUser);
-  }
-
-  function editProduct(product) {
-    fetch("http://localhost:8080/api/products/edit", {
-      method: "PUT",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify(product)
-    }).then(setTimeout(() => { getProducts() }, 1000)).then(alert("Product Edited"));
-  }
-
-  function deleteProduct(product) {
-    fetch(`http://localhost:8080/api/products/${product.id}`, { method: "DELETE" })
-      .then(setTimeout(() => { getProducts() }, 1000));
-  }
-
-  function addNewProduct(product) {
-    fetch("http://localhost:8080/api/products/add", {
-      method: "POST",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify(product)
-    }).then(setTimeout(() => { getProducts() }, 1000)).then(alert("Product added"));
-  }
-
-  function addRemoveItem(cartItem) {
-    if (cartItems.filter(item => item.productId === cartItem.productId).length > 0) {
-      fetch(`http://localhost:8080/${user.username}/${cartItem.productId}`,
-        { method: "DELETE" }).then(setTimeout(() => { getCart() }, 1000));
-    } else {
-      fetch(`http://localhost:8080/${user.username}/cart`, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(cartItem)
-      }).then(setTimeout(() => { getCart() }, 1000));
-    }
-  }
-
-  function updateQuantity(productId, quantity) {
-    let newCartItem = { "productId": productId, "quantity": quantity };
-    fetch(`http://localhost:8080/${user.username}/cart`, {
-      method: "PUT",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify(newCartItem)
-    }).then(setTimeout(() => { getCart() }, 1000));
-  }
-
   return (
-    <BrowserRouter>
-      <div className="background">
-        <NavigationBar
-          username={user.username}
-          cartItems={cartItems}
-        />
-        <RouteHandler
-          addNewProduct={addNewProduct}
-          editProduct={editProduct}
-          deleteProduct={deleteProduct}
-          cartItems={cartItems}
-          addRemoveItem={addRemoveItem}
-          handleLogin={handleLogin}
-          username={user.username}
-          products={products}
-          updateQuantity={updateQuantity}
-        />
-      </div>
-    </BrowserRouter>
+    <UserProvider>
+      <CartProvider>
+        <ProductProvider>
+          <BrowserRouter>
+            <div className="background">
+              <NavigationBar />
+              <Switch>
+                <Route exact path="/" component={HomeScreen} />
+                <Route exact path="/login" component={Login} />
+                <Route exact path="/admin" component={AdminScreen} />
+                <Route exact path="/admin/add" component={AdminAdd} />
+                <Route path="/admin/edit/" component={AdminEdit} />
+                <Route exact path="/cart" component={CartScreen} />
+              </Switch>
+            </div>
+          </BrowserRouter>
+        </ProductProvider>
+      </CartProvider>
+    </UserProvider>
   )
 }

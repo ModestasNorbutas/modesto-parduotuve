@@ -1,17 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-
+import { ProductContext } from "../Context/ProductContext";
 import HomeItem from "./HomeItem/HomeItem";
 
-export default function HomeScreen(props) {
+export default function HomeScreen() {
 
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    fetch("http://localhost:8080/api/products")
-      .then(response => response.json())
-      .then(data => setProducts(data));
-  }, []);
+  const { products } = useContext(ProductContext);
 
   return (
     <Container>
@@ -20,8 +14,6 @@ export default function HomeScreen(props) {
           <Col className="col" key={product.id}>
             <HomeItem
               product={product}
-              addRemoveItem={props.addRemoveItem}
-              cartItems={props.cartItems}
             />
           </Col>
         )}

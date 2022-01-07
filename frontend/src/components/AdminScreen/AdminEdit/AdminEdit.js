@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import { } from "react-router-dom";
 import { Container, Card, Row } from "react-bootstrap";
 import "./AdminEdit.css"
+import { ProductContext } from "../../Context/ProductContext";
 
-export default function AdminEdit(props) {
+export default function AdminEdit() {
 
   const location = useLocation();
   const history = useHistory();
 
+  const { updateProducts } = useContext(ProductContext);
   const [formData, setFormData] = useState(location.state.params)
 
   function handleChange(event) {
@@ -20,9 +22,21 @@ export default function AdminEdit(props) {
     }))
   }
 
-  function handleDelete() {
-    props.deleteProduct(formData);
-    history.push("/admin");
+  function deleteProduct() {
+    fetch(`http://localhost:8080/api/products/${formData.id}`, { method: "DELETE" })
+      .then(alert("Delete request sent"))
+      .then(updateProducts(prevState => prevState + 1))
+      .then(history.push("/admin"));
+  }
+
+  function editProduct() {
+    fetch("http://localhost:8080/api/products/edit", {
+      method: "PUT",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(formData)
+    }).then(alert("Edit request sent"))
+      .then(updateProducts(prevState => prevState + 1))
+      .then(history.push("/admin"));
   }
 
   return (
@@ -92,13 +106,13 @@ export default function AdminEdit(props) {
             <button
               type="submit"
               className="btn btn-success"
-              onClick={() => props.editProduct(formData)}
+              onClick={editProduct}
             >
               Edit Product
             </button>
             <button
               className="btn btn-danger"
-              onClick={handleDelete}
+              onClick={deleteProduct}
             >
               Delete product
             </button>

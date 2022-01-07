@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Container, Table, Row, Card } from "react-bootstrap";
 import "./CartScreen.css";
 import CartItem from "./CartItem/CartItem";
+import { ProductContext } from "../Context/ProductContext";
+import { UserContext } from "../Context/UserContext";
+import { CartContext } from "../Context/CartContext";
 
-export default function CartScreen(props) {
+export default function CartScreen() {
+
+  const { cartItems } = useContext(CartContext);
+  const { products } = useContext(ProductContext);
+  const { user } = useContext(UserContext);
 
   let emptyProduct = {
     "id": 0,
@@ -14,12 +21,12 @@ export default function CartScreen(props) {
     "description": "Item is not available"
   }
 
-  let totalQuantity = props.cartItems.reduce((sum, item) => sum + item.quantity, 0);
-  let itemsPrice = props.cartItems
-    .map(item => (props.products.find(product => product.id === item.productId) || emptyProduct).price)
+  let totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  let itemsPrice = cartItems
+    .map(item => (products.find(product => product.id === item.productId) || emptyProduct).price)
     .reduce((sum, price) => sum + price, 0);
-  let totalPrice = props.cartItems
-    .map(item => item.quantity * (props.products
+  let totalPrice = cartItems
+    .map(item => item.quantity * (products
       .find(product => product.id === item.productId) || emptyProduct).price || 0)
     .reduce((sum, price) => sum + price, 0);
 
@@ -27,7 +34,7 @@ export default function CartScreen(props) {
     <Container>
       <Row className="row justify-content-center">
         <Card className="cart-screen">
-          <h4>Manage your purchase, {props.username}</h4>
+          <h4>Manage your purchase, {user.username}</h4>
           <Table striped bordered hover>
             <thead>
               <tr>
@@ -41,13 +48,11 @@ export default function CartScreen(props) {
               </tr>
             </thead>
             <tbody>
-              {props.cartItems.map(item =>
+              {cartItems.map(item =>
                 <CartItem
                   key={item.productId}
                   item={item}
-                  addRemoveItem={props.addRemoveItem}
-                  product={props.products.find(product => product.id === item.productId) || emptyProduct}
-                  updateQuantity={props.updateQuantity}
+                  product={products.find(product => product.id === item.productId) || emptyProduct}
                 />
               )}
               <tr>

@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Container, Card, Form, Button, Row } from "react-bootstrap";
 import "./Login.css";
+import { UserContext } from "../Context/UserContext";
 
 export default function Login(props) {
 
-  const [formData, setFormData] = React.useState({
+  const { user, setUser } = useContext(UserContext);
+
+  const [formData, setFormData] = useState({
     username: "",
     password: ""
   });
@@ -16,12 +19,17 @@ export default function Login(props) {
     }))
   }
 
+  function handleLogin(event) {
+    event.preventDefault();
+    setUser(formData)
+  }
+
   return (
     <Container>
       <Row className="row justify-content-center">
         <Card className="col login--card">
-          <h4>Current user: {props.username}</h4>
-          <Form onSubmit={(event) => props.handleLogin(event, formData)}>
+          <h4>Current user: {user.username}</h4>
+          <Form onSubmit={(event) => handleLogin(event)}>
             <Form.Group className="mb-3" controlId="formBasicText">
               <Form.Label>Enter your username:</Form.Label>
               <Form.Control

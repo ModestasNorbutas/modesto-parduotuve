@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Button } from "react-bootstrap";
+import { UserContext } from "../../Context/UserContext";
+import { CartContext } from "../../Context/CartContext";
 import "./CartItem.css";
 
 export default function CartItem(props) {
 
+  const { user } = useContext(UserContext);
+  const { updateCart } = useContext(CartContext);
   const [chosenQty, setChosenQty] = useState(props.item.quantity)
 
   function handleChange(event) {
@@ -15,6 +19,20 @@ export default function CartItem(props) {
     } else {
       setChosenQty(value);
     }
+  }
+
+  function updateQuantity() {
+    let newCartItem = { "productId": props.product.id, "quantity": chosenQty };
+    fetch(`http://localhost:8080/${user.username}/cart`, {
+      method: "PUT",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(newCartItem)
+    }).then(updateCart(prevState => prevState + 1));
+  }
+
+  function removeItem() {
+    fetch(`http://localhost:8080/${user.username}/${props.product.id}`,
+      { method: "DELETE" }).then(updateCart(prevState => prevState + 1));
   }
 
   return (
@@ -39,7 +57,7 @@ export default function CartItem(props) {
             className="cart-item--form-control"
           />
           <button
-            onClick={() => props.updateQuantity(props.item.productId, chosenQty)}
+            onClick={updateQuantity}
             className="btn btn-primary"
           >Ok</button>
         </div>
@@ -48,8 +66,7 @@ export default function CartItem(props) {
       <td className="align-middle">{props.product.price * props.item.quantity} &euro;</td>
       <th className="align-middle">
         <Button
-          onClick={() =>
-            props.addRemoveItem(props.item)}
+          onClick={removeItem}
         >
           Remove
         </Button></th>

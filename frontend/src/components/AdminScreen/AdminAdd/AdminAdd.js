@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { Container, Card, Row } from "react-bootstrap";
 import "./AdminAdd.css"
+import { ProductContext } from "../../Context/ProductContext";
 
-export default function AdminAdd(props) {
+export default function AdminAdd() {
 
   const history = useHistory();
+
+  const { updateProducts } = useContext(ProductContext);
 
   const [formData, setFormData] = useState({
     "name": "",
@@ -22,6 +25,16 @@ export default function AdminAdd(props) {
         isNaN(event.target.valueAsNumber) ? 0 : event.target.valueAsNumber :
         event.target.value
     }))
+  }
+
+  function addNewProduct() {
+    fetch("http://localhost:8080/api/products/add", {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(formData)
+    }).then(alert("Add request sent"))
+      .then(updateProducts(prevState => prevState + 1))
+      .then(history.push("/admin"))
   }
 
   return (
@@ -91,7 +104,7 @@ export default function AdminAdd(props) {
             <button
               type="submit"
               className="btn btn-success"
-              onClick={() => props.addNewProduct(formData)}
+              onClick={addNewProduct}
             >
               Add product
             </button>

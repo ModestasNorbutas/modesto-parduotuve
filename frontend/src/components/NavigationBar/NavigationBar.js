@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Navbar, Container, Nav } from "react-bootstrap";
 import "./NavigationBar.css";
+import { UserContext } from "../Context/UserContext";
+import { CartContext } from "../Context/CartContext";
 
 export default function NavigationBar(props) {
 
-  let amountOfItems = props.cartItems.length;
+  const { user } = useContext(UserContext);
+  const { cartItems } = useContext(CartContext);
+
+  const amountOfItems = cartItems.length;
 
   return (
     <div>
@@ -27,7 +32,7 @@ export default function NavigationBar(props) {
             </Link>
           </Nav>
           <span className="navbar-text">
-            User: {props.username}
+            User: {user.username}
           </span>
         </Container>
       </Navbar>
