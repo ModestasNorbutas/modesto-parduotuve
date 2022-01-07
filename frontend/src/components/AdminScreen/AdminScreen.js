@@ -1,21 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Container, Table, Row, Card, Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import "./AdminScreen.css"
 import AdminItem from "./AdminItem/AdminItem";
 
 
-export default function AdminScreen() {
+export default function AdminScreen(props) {
 
   let history = useHistory();
-
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    fetch("http://localhost:8080/api/products")
-      .then(response => response.json())
-      .then(data => setProducts(data));
-  }, []);
 
   return (
     <Container>
@@ -41,7 +33,7 @@ export default function AdminScreen() {
               </tr>
             </thead>
             <tbody>
-              {products.map(product =>
+              {props.products.map(product =>
                 <AdminItem
                   key={product.id}
                   product={product}

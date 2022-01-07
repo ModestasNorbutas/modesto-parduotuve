@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { Container, Card, Row } from "react-bootstrap";
 import "./AdminAdd.css"
 
-export default function AdminAdd() {
+export default function AdminAdd(props) {
 
   const history = useHistory();
 
@@ -22,14 +22,6 @@ export default function AdminAdd() {
         isNaN(event.target.valueAsNumber) ? 0 : event.target.valueAsNumber :
         event.target.value
     }))
-  }
-
-  function addNewProduct() {
-    fetch("http://localhost:8080/api/products/add", {
-      method: "POST",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify(formData)
-    }).then(response => response.json()).then(data => alert("Product added: " + JSON.stringify(data)));
   }
 
   return (
@@ -99,7 +91,7 @@ export default function AdminAdd() {
             <button
               type="submit"
               className="btn btn-success"
-              onClick={addNewProduct}
+              onClick={() => props.addNewProduct(formData)}
             >
               Add product
             </button>

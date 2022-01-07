@@ -6,10 +6,10 @@ export default function HomeItem(props) {
 
   const { id, imageUrl, name, description, price } = props.product;
 
-  const isInCart = props.cartItems.filter(item => item.id === props.product.id).length > 0 ? true : false
+  const isInCart = props.cartItems.filter(item => item.productId === props.product.id).length > 0 ? true : false
 
   const cartItem = {
-    "id": id,
+    "productId": id,
     "quantity": 1
   }
 

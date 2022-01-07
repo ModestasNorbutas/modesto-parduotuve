@@ -18,13 +18,13 @@ import it.akademija.backend.repository.ProductRepository;
 
 @CrossOrigin
 @RestController
-@RequestMapping("api/") // <<<=== YOU MIGHT NEED TO CHANGE THIS
+@RequestMapping("api/")
 public class ProductController {
 
     @Autowired
     private ProductRepository productRepository;
 
-    @GetMapping("products") // <<<=== YOU MIGHT NEED TO CHANGE THIS
+    @GetMapping("products")
     public List<Product> getAllProducts() {
 	return this.productRepository.findAll();
     }
@@ -36,7 +36,7 @@ public class ProductController {
     }
 
     @DeleteMapping("products/{productId}")
-    public String deleteProduct(@PathVariable int productId) {
+    public String deleteProduct(@PathVariable Integer productId) {
 	productRepository.deleteById(productId);
 	return "Product #" + productId + " deleted";
     }

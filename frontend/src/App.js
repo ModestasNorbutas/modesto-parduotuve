@@ -12,54 +12,73 @@ export default function App() {
     "password": ""
   });
   const [cartItems, setCartItems] = useState([]);
-  const [userCarts, setUserCarts] = useState([{
-    "user": "Anonymous",
-    "items": cartItems
-  }]);
 
   useEffect(() => {
-    updateProducts();
+    getProducts();
   }, []);
 
-  function updateProducts() {
+  useEffect(() => {
+    getCart();
+  }, [user.username])
+
+  function getProducts() {
     fetch("http://localhost:8080/api/products")
       .then(response => response.json())
       .then(data => setProducts(data));
   }
 
+  function getCart() {
+    fetch(`http://localhost:8080/${user.username}/cart`)
+      .then(response => response.json())
+      .then(data => setCartItems(data));
+  }
+
   function handleLogin(event, newUser) {
     event.preventDefault();
-    setUserCarts(prevCarts => {
-      return prevCarts.find(cart => cart.user === user.username) === undefined ?
-        [...prevCarts, { "user": user.username, "items": cartItems }] :
-        prevCarts.map(cart => cart.user === user.username ? { "user": user.username, "items": cartItems } : cart)
-    })
     setUser(newUser);
-    setCartItems(userCarts.find(cart => cart.user === newUser.username) === undefined ? [] :
-      userCarts.find(cart => cart.user === newUser.username).items
-    )
+  }
+
+  function editProduct(product) {
+    fetch("http://localhost:8080/api/products/edit", {
+      method: "PUT",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(product)
+    }).then(setTimeout(() => { getProducts() }, 1000)).then(alert("Product Edited"));
+  }
+
+  function deleteProduct(product) {
+    fetch(`http://localhost:8080/api/products/${product.id}`, { method: "DELETE" })
+      .then(setTimeout(() => { getProducts() }, 1000));
+  }
+
+  function addNewProduct(product) {
+    fetch("http://localhost:8080/api/products/add", {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(product)
+    }).then(setTimeout(() => { getProducts() }, 1000)).then(alert("Product added"));
   }
 
   function addRemoveItem(cartItem) {
-    setCartItems(prevItems => {
-      if (prevItems.filter(item => item.id === cartItem.id).length > 0) {
-        return prevItems.filter(item => item.id !== cartItem.id);
-      } else {
-        return [...prevItems, cartItem];
-      }
-    })
+    if (cartItems.filter(item => item.productId === cartItem.productId).length > 0) {
+      fetch(`http://localhost:8080/${user.username}/${cartItem.productId}`,
+        { method: "DELETE" }).then(setTimeout(() => { getCart() }, 1000));
+    } else {
+      fetch(`http://localhost:8080/${user.username}/cart`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(cartItem)
+      }).then(setTimeout(() => { getCart() }, 1000));
+    }
   }
 
-  function updateQuantity(itemId, itemQuantity) {
-    let newQuantity = parseInt(itemQuantity);
-    let maxQuantity = products.find(product => product.id === itemId).quantity;
-    if (newQuantity > maxQuantity) {
-      newQuantity = maxQuantity;
-    } else if (newQuantity <= 0 || isNaN(newQuantity)) {
-      newQuantity = 1;
-    }
-    setCartItems(prevItems => prevItems.map(item =>
-      item.id === itemId ? { "id": itemId, "quantity": newQuantity } : item))
+  function updateQuantity(productId, quantity) {
+    let newCartItem = { "productId": productId, "quantity": quantity };
+    fetch(`http://localhost:8080/${user.username}/cart`, {
+      method: "PUT",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(newCartItem)
+    }).then(setTimeout(() => { getCart() }, 1000));
   }
 
   return (
@@ -70,6 +89,9 @@ export default function App() {
           cartItems={cartItems}
         />
         <RouteHandler
+          addNewProduct={addNewProduct}
+          editProduct={editProduct}
+          deleteProduct={deleteProduct}
           cartItems={cartItems}
           addRemoveItem={addRemoveItem}
           handleLogin={handleLogin}

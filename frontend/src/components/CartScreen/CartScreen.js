@@ -7,7 +7,7 @@ export default function CartScreen(props) {
 
   let emptyProduct = {
     "id": 0,
-    "name": "Out of stock",
+    "name": "Item is not available",
     "imageUrl": "",
     "price": 0,
     "quantity": 0,
@@ -16,11 +16,11 @@ export default function CartScreen(props) {
 
   let totalQuantity = props.cartItems.reduce((sum, item) => sum + item.quantity, 0);
   let itemsPrice = props.cartItems
-    .map(item => (props.products.find(product => product.id === item.id) || emptyProduct).price)
+    .map(item => (props.products.find(product => product.id === item.productId) || emptyProduct).price)
     .reduce((sum, price) => sum + price, 0);
   let totalPrice = props.cartItems
     .map(item => item.quantity * (props.products
-      .find(product => product.id === item.id) || emptyProduct).price || 0)
+      .find(product => product.id === item.productId) || emptyProduct).price || 0)
     .reduce((sum, price) => sum + price, 0);
 
   return (
@@ -43,18 +43,18 @@ export default function CartScreen(props) {
             <tbody>
               {props.cartItems.map(item =>
                 <CartItem
-                  key={item.id}
+                  key={item.productId}
                   item={item}
                   addRemoveItem={props.addRemoveItem}
-                  product={props.products.find(product => product.id === item.id) || emptyProduct}
+                  product={props.products.find(product => product.id === item.productId) || emptyProduct}
                   updateQuantity={props.updateQuantity}
                 />
               )}
               <tr>
                 <td colSpan={3}></td>
                 <td>{totalQuantity}</td>
-                <td>{itemsPrice}</td>
-                <td>{totalPrice}</td>
+                <td>{itemsPrice} &euro;</td>
+                <td>{totalPrice} &euro;</td>
                 <td></td>
               </tr>
             </tbody>
