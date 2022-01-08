@@ -1,35 +1,24 @@
 package it.akademija.backend.model;
 
-public class Product {
+public class NewProduct {
 
-    private static Integer idCounter = 0;
-    private Integer id;
     private String name;
     private String imageUrl;
     private Double price;
     private Integer quantity;
     private String description;
 
-    public Product() {
-
+    public NewProduct() {
+	super();
     }
 
-    public Product(String name, String imageUrl, Double price, Integer quantity, String description) {
+    public NewProduct(String name, String imageUrl, Double price, Integer quantity, String description) {
 	super();
-	this.id = ++idCounter;
 	this.name = name;
 	this.imageUrl = imageUrl;
 	this.price = price;
 	this.quantity = quantity;
 	this.description = description;
-    }
-
-    public Integer getId() {
-	return id;
-    }
-
-    public void setId(Integer id) {
-	this.id = id;
     }
 
     public String getName() {
@@ -70,14 +59,6 @@ public class Product {
 
     public void setDescription(String description) {
 	this.description = description;
-    }
-
-    public void replace(Product product) {
-	this.name = product.getName();
-	this.imageUrl = product.getImageUrl();
-	this.price = product.getPrice();
-	this.quantity = product.getQuantity();
-	this.description = product.getDescription();
     }
 
 }

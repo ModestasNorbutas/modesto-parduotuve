@@ -14,7 +14,7 @@ export function UserProvider(props) {
 
   function saveUser(newUser) {
     localStorage.setItem("user", JSON.stringify(newUser));
-    setUser(newUser)
+    setUser(newUser);
   }
 
   return (

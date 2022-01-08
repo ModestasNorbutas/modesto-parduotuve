@@ -25,7 +25,7 @@ public class CartItem {
 	this.productId = productId;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
 	return quantity;
     }
 

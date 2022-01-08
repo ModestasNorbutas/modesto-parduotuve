@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.akademija.backend.model.NewProduct;
 import it.akademija.backend.model.Product;
 import it.akademija.backend.repository.ProductRepository;
 
@@ -26,31 +27,35 @@ public class ProductController {
 
     @GetMapping("products")
     public List<Product> getAllProducts() {
-	return productRepository.findAll();
+	return productRepository.getProducts();
     }
 
     @GetMapping("products/{productId}")
     public Product getProduct(@PathVariable Integer productId) {
-	return productRepository.findById(productId)
+	return productRepository.getProducts()
+				.stream()
+				.filter(product -> product.getId()
+							  .equals(productId))
+				.findAny()
 				.orElseThrow(() -> new RuntimeException("Unable to find product :("));
     }
 
     @DeleteMapping("products/{productId}")
     public List<Product> deleteProduct(@PathVariable Integer productId) {
-	productRepository.deleteById(productId);
-	return productRepository.findAll();
+	productRepository.deleteProduct(productId);
+	return productRepository.getProducts();
     }
 
     @PostMapping("products/add")
-    public List<Product> addProduct(@RequestBody Product product) {
-	productRepository.save(product);
-	return productRepository.findAll();
+    public List<Product> addProduct(@RequestBody NewProduct newProduct) {
+	productRepository.addProduct(newProduct);
+	return productRepository.getProducts();
     }
 
     @PutMapping("products/edit")
     public List<Product> editProduct(@RequestBody Product product) {
-	productRepository.save(product);
-	return productRepository.findAll();
+	productRepository.replaceProduct(product);
+	return productRepository.getProducts();
     }
 
 }

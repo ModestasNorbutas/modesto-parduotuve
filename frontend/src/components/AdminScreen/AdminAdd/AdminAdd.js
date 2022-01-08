@@ -14,8 +14,8 @@ export default function AdminAdd() {
   const [formData, setFormData] = useState({
     "name": "",
     "imageUrl": "",
-    "price": "",
-    "quantity": "",
+    "price": 0,
+    "quantity": 0,
     "description": ""
   })
 
