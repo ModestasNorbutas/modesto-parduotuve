@@ -1,11 +1,13 @@
 import React, { useContext, useState } from "react";
+import axios from "axios";
 import { Container, Card, Form, Button, Row } from "react-bootstrap";
 import "./Login.css";
+
 import { UserContext } from "../Context/UserContext";
 
-export default function Login(props) {
+export default function Login() {
 
-  const { user, setUser } = useContext(UserContext);
+  const { user, saveUser } = useContext(UserContext);
 
   const [formData, setFormData] = useState({
     username: "",
@@ -19,9 +21,35 @@ export default function Login(props) {
     }))
   }
 
-  function handleLogin(event) {
-    event.preventDefault();
-    setUser(formData)
+  function handleLogin() {
+    axios.post("http://localhost:8080/login", formData)
+      .then(response => {
+        if (response.data.success) {
+          return saveUser(response.data.response);
+        } else {
+          return alert(response.data.error);
+        }
+      })
+      .catch(error => alert(error));
+  }
+
+  function handleSignup() {
+    axios.post("http://localhost:8080/signup", formData)
+      .then(response => {
+        if (response.data.success) {
+          return saveUser(response.data.response);
+        } else {
+          return alert(response.data.error);
+        }
+      })
+      .catch(error => alert(error));
+  }
+
+  function handleLogout() {
+    saveUser({
+      "username": "Anonymous",
+      "password": ""
+    });
   }
 
   return (
@@ -29,7 +57,7 @@ export default function Login(props) {
       <Row className="row justify-content-center">
         <Card className="col login--card">
           <h4>Current user: {user.username}</h4>
-          <Form onSubmit={(event) => handleLogin(event)}>
+          <Form>
             <Form.Group className="mb-3" controlId="formBasicText">
               <Form.Label>Enter your username:</Form.Label>
               <Form.Control
@@ -50,8 +78,23 @@ export default function Login(props) {
                 onChange={handleChange}
               />
             </Form.Group>
-            <Button variant="primary" type="submit">
-              Login
+            <Button
+              variant="success"
+              onClick={handleLogin}
+            >
+              Log in
+            </Button>
+            <Button
+              variant="primary"
+              onClick={handleSignup}
+            >
+              Sign up
+            </Button>
+            <Button
+              variant="danger"
+              onClick={handleLogout}
+            >
+              Log out
             </Button>
           </Form>
         </Card>

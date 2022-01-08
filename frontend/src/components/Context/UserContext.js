@@ -4,13 +4,21 @@ export const UserContext = createContext();
 
 export function UserProvider(props) {
 
-  const [user, setUser] = useState({
-    "username": "Anonymous",
-    "password": ""
-  });
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("user")) ||
+    {
+      "username": "Anonymous",
+      "password": ""
+    }
+  );
+
+  function saveUser(newUser) {
+    localStorage.setItem("user", JSON.stringify(newUser));
+    setUser(newUser)
+  }
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, saveUser }}>
       {props.children}
     </UserContext.Provider>
   );

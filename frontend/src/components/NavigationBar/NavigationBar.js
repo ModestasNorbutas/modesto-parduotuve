@@ -2,10 +2,11 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Navbar, Container, Nav } from "react-bootstrap";
 import "./NavigationBar.css";
+
 import { UserContext } from "../Context/UserContext";
 import { CartContext } from "../Context/CartContext";
 
-export default function NavigationBar(props) {
+export default function NavigationBar() {
 
   const { user } = useContext(UserContext);
   const { cartItems } = useContext(CartContext);

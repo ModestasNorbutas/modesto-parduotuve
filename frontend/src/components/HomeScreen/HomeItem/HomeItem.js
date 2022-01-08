@@ -1,15 +1,17 @@
 import React, { useContext } from "react";
+import axios from "axios";
 import { Card, Button } from "react-bootstrap";
 import "./HomeItem.css";
+
 import { CartContext } from "../../Context/CartContext";
 import { UserContext } from "../../Context/UserContext";
-import axios from "axios";
 
 export default function HomeItem(props) {
 
   const { user } = useContext(UserContext);
   const { cartItems, setCartItems } = useContext(CartContext);
   const { id, imageUrl, name, description, price } = props.product;
+
   const isInCart = cartItems.filter(item => item.productId === props.product.id).length > 0 ? true : false;
 
   const cartItem = {
@@ -30,7 +32,7 @@ export default function HomeItem(props) {
   }
 
   return (
-    <Card className="home-item">
+    <Card className="home-item--card">
       <Card.Img
         variant="top"
         className="home-item--image"

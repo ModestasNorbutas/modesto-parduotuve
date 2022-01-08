@@ -1,13 +1,14 @@
-.home-item {
+.home-item--card {
   width: 18rem;
   margin: 1rem auto;
   text-align: center;
+}
+
+.home-item--image {
+  max-height: 150px;
 }
 
 .home-item--description {
   text-align: justify;
 }
 
-.home-item--image {
-  max-height: 150px;
-}

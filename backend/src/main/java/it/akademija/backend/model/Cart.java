@@ -1,17 +1,18 @@
 package it.akademija.backend.model;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class Cart {
 
     private String username;
-    private Set<CartItem> cartItems;
+    private LinkedHashSet<CartItem> cartItems;
 
     public Cart() {
 
     }
 
-    public Cart(String username, Set<CartItem> cartItems) {
+    public Cart(String username, LinkedHashSet<CartItem> cartItems) {
 	super();
 	this.username = username;
 	this.cartItems = cartItems;
@@ -29,7 +30,7 @@ public class Cart {
 	return cartItems;
     }
 
-    public void setCartItems(Set<CartItem> cartItems) {
+    public void setCartItems(LinkedHashSet<CartItem> cartItems) {
 	this.cartItems = cartItems;
     }
 

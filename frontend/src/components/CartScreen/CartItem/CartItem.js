@@ -1,9 +1,10 @@
 import React, { useState, useContext } from "react";
+import axios from "axios";
 import { Button } from "react-bootstrap";
+import "./CartItem.css";
+
 import { UserContext } from "../../Context/UserContext";
 import { CartContext } from "../../Context/CartContext";
-import "./CartItem.css";
-import axios from "axios";
 
 export default function CartItem(props) {
 

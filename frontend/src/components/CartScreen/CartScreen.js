@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
 import { Container, Table, Row, Card } from "react-bootstrap";
 import "./CartScreen.css";
-import CartItem from "./CartItem/CartItem";
+
 import { ProductContext } from "../Context/ProductContext";
 import { UserContext } from "../Context/UserContext";
 import { CartContext } from "../Context/CartContext";
+import CartItem from "./CartItem/CartItem";
 
 export default function CartScreen() {
 

@@ -38,7 +38,7 @@ export default function AdminAdd() {
   return (
     <Container>
       <Row className="row justify-content-center">
-        <Card className="col admin-add">
+        <Card className="col admin-add--card">
           <h4>New product</h4>
           <div>
             <div className="form-group">

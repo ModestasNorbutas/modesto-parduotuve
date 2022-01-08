@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -25,7 +24,7 @@ import it.akademija.backend.model.CartItem;
 @RequestMapping("/")
 public class CartController {
 
-    private Map<String, Set<CartItem>> userCarts;
+    private Map<String, LinkedHashSet<CartItem>> userCarts;
 
     public CartController() {
 	this.userCarts = new ConcurrentHashMap<>();
@@ -38,7 +37,7 @@ public class CartController {
 
     @PostMapping("{username}/cart")
     public List<CartItem> addToCart(@PathVariable String username, @RequestBody CartItem cartItem) {
-	Set<CartItem> currentItems = userCarts.getOrDefault(username, new LinkedHashSet<>());
+	LinkedHashSet<CartItem> currentItems = userCarts.getOrDefault(username, new LinkedHashSet<>());
 	currentItems.add(cartItem);
 	userCarts.put(username, currentItems);
 	return getCart(username);
@@ -46,23 +45,28 @@ public class CartController {
 
     @PutMapping("{username}/cart")
     public List<CartItem> editCart(@PathVariable String username, @RequestBody CartItem cartItem) {
-	Set<CartItem> currentItems = userCarts.getOrDefault(username, new LinkedHashSet<>());
+	LinkedHashSet<CartItem> currentItems = userCarts.getOrDefault(username, new LinkedHashSet<>());
 	currentItems = currentItems.stream()
-				   .filter(item -> !item.getProductId()
-							.equals(cartItem.getProductId()))
-				   .collect(Collectors.toSet());
-	currentItems.add(cartItem);
+				   .map(item -> {
+				       if (item.getProductId()
+					       .equals(cartItem.getProductId())) {
+					   return cartItem;
+				       } else {
+					   return item;
+				       }
+				   })
+				   .collect(Collectors.toCollection(LinkedHashSet::new));
 	userCarts.put(username, currentItems);
 	return getCart(username);
     }
 
     @DeleteMapping("{username}/{productId}")
     public List<CartItem> removeFromCart(@PathVariable String username, @PathVariable Integer productId) {
-	Set<CartItem> currentItems = userCarts.getOrDefault(username, new LinkedHashSet<>());
+	LinkedHashSet<CartItem> currentItems = userCarts.getOrDefault(username, new LinkedHashSet<>());
 	currentItems = currentItems.stream()
 				   .filter(item -> !item.getProductId()
 							.equals(productId))
-				   .collect(Collectors.toSet());
+				   .collect(Collectors.toCollection(LinkedHashSet::new));
 	userCarts.put(username, currentItems);
 	return getCart(username);
     }
