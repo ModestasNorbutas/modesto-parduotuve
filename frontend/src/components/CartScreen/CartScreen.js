@@ -25,11 +25,11 @@ export default function CartScreen() {
   let totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   let itemsPrice = cartItems
     .map(item => (products.find(product => product.id === item.productId) || emptyProduct).price)
-    .reduce((sum, price) => sum + price, 0);
+    .reduce((sum, price) => sum + price, 0).toFixed(2);
   let totalPrice = cartItems
     .map(item => item.quantity * (products
       .find(product => product.id === item.productId) || emptyProduct).price || 0)
-    .reduce((sum, price) => sum + price, 0);
+    .reduce((sum, price) => sum + price, 0).toFixed(2);
 
   return (
     <Container>

@@ -2,13 +2,20 @@ package it.akademija.backend.model;
 
 import java.util.Objects;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "USERS")
 public class User {
 
+    @Id
     private String username;
     private String password;
 
     public User() {
-
+	super();
     }
 
     public User(String username, String password) {

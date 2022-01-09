@@ -1,63 +1,45 @@
 package it.akademija.backend.controller;
 
-import java.util.HashMap;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.akademija.backend.model.ResponseBody;
 import it.akademija.backend.model.User;
+import it.akademija.backend.service.UserService;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/")
+@RequestMapping("api/")
 public class UserController {
 
-    private HashMap<String, User> allUsers;
+    @Autowired
+    private UserService userService;
 
-    public UserController() {
-	this.allUsers = new HashMap<>();
+    @PostMapping("/user/login/{username}")
+    public ResponseBody login(@PathVariable String username, @RequestBody String password) {
+	return userService.getUser(username, password);
     }
 
-    @PostMapping("login")
-    public ResponseBody login(@RequestBody User user) {
-	User existingUser = allUsers.get(user.getUsername());
-	if (existingUser == null) {
-	    return new ResponseBody(false, user, "Unable to find user :(");
-	} else if (!existingUser.getPassword()
-				.equals(user.getPassword())) {
-	    return new ResponseBody(false, user, "Password was incorrect!");
-	} else {
-	    return new ResponseBody(true, existingUser, "Success!");
-	}
-    }
-
-    @PostMapping("signup")
+    @PostMapping("/user/signup")
     public ResponseBody signup(@RequestBody User user) {
-	if (allUsers.containsKey(user.getUsername())) {
-	    return new ResponseBody(false, user, "User already exists");
-	} else {
-	    allUsers.put(user.getUsername(), user);
-	    return new ResponseBody(true, user, "Success!");
-	}
+	return userService.addUser(user);
+    }
+
+    @DeleteMapping("/user/delete")
+    public ResponseBody deleteUser(@RequestBody User user) {
+	return userService.deleteUser(user);
+    }
+
+    @PutMapping("/user/edit")
+    public ResponseBody editUser(@RequestBody User user) {
+	return userService.editUser(user);
     }
 
 }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//

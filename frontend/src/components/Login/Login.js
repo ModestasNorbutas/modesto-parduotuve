@@ -22,7 +22,8 @@ export default function Login() {
   }
 
   function handleLogin() {
-    axios.post("http://localhost:8080/login", formData)
+    axios.post(`http://localhost:8080/api/user/login/${formData.username}`, formData.password,
+      { headers: { "Content-Type": "text/plain" } })
       .then(response => {
         if (response.data.success) {
           return saveUser(response.data.response);
@@ -34,7 +35,7 @@ export default function Login() {
   }
 
   function handleSignup() {
-    axios.post("http://localhost:8080/signup", formData)
+    axios.post("http://localhost:8080/api/user/signup", formData)
       .then(response => {
         if (response.data.success) {
           return saveUser(response.data.response);

@@ -63,8 +63,8 @@ export default function CartItem(props) {
           >Ok</button>
         </div>
       </td>
-      <td className="align-middle">{props.product.price} &euro;</td>
-      <td className="align-middle">{props.product.price * props.item.quantity} &euro;</td>
+      <td className="align-middle">{props.product.price.toFixed(2)} &euro;</td>
+      <td className="align-middle">{(props.product.price * props.item.quantity).toFixed(2)} &euro;</td>
       <th className="align-middle">
         <Button
           onClick={removeItem}

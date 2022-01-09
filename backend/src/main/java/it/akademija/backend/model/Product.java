@@ -1,5 +1,7 @@
 package it.akademija.backend.model;
 
+import java.util.Objects;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -40,53 +42,59 @@ public class Product {
 	return name;
     }
 
-    public Product setName(String name) {
+    public void setName(String name) {
 	this.name = name;
-	return this;
     }
 
     public String getImageUrl() {
 	return imageUrl;
     }
 
-    public Product setImageUrl(String imageUrl) {
+    public void setImageUrl(String imageUrl) {
 	this.imageUrl = imageUrl;
-	return this;
     }
 
     public Double getPrice() {
 	return price;
     }
 
-    public Product setPrice(Double price) {
+    public void setPrice(Double price) {
 	this.price = price;
-	return this;
     }
 
     public Integer getQuantity() {
 	return quantity;
     }
 
-    public Product setQuantity(Integer quantity) {
+    public void setQuantity(Integer quantity) {
 	this.quantity = quantity;
-	return this;
     }
 
     public String getDescription() {
 	return description;
     }
 
-    public Product setDescription(String description) {
+    public void setDescription(String description) {
 	this.description = description;
-	return this;
     }
 
-    public void replace(Product product) {
-	this.name = product.getName();
-	this.imageUrl = product.getImageUrl();
-	this.price = product.getPrice();
-	this.quantity = product.getQuantity();
-	this.description = product.getDescription();
+    @Override
+    public int hashCode() {
+	return Objects.hash(description, id, imageUrl, name, price, quantity);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	Product other = (Product) obj;
+	return Objects.equals(description, other.description) && Objects.equals(id, other.id)
+		&& Objects.equals(imageUrl, other.imageUrl) && Objects.equals(name, other.name)
+		&& Objects.equals(price, other.price) && Objects.equals(quantity, other.quantity);
     }
 
 }
