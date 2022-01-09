@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.akademija.backend.model.NewProduct;
 import it.akademija.backend.model.Product;
-import it.akademija.backend.repository.ProductRepository;
+import it.akademija.backend.service.ProductService;
 
 @CrossOrigin
 @RestController
@@ -23,39 +22,31 @@ import it.akademija.backend.repository.ProductRepository;
 public class ProductController {
 
     @Autowired
-    private ProductRepository productRepository;
+    private ProductService productService;
 
     @GetMapping("products")
     public List<Product> getAllProducts() {
-	return productRepository.getProducts();
+	return productService.getAllProducts();
     }
 
     @GetMapping("products/{productId}")
     public Product getProduct(@PathVariable Integer productId) {
-	return productRepository.getProducts()
-				.stream()
-				.filter(product -> product.getId()
-							  .equals(productId))
-				.findAny()
-				.orElseThrow(() -> new RuntimeException("Unable to find product :("));
+	return productService.getProduct(productId);
     }
 
     @DeleteMapping("products/{productId}")
     public List<Product> deleteProduct(@PathVariable Integer productId) {
-	productRepository.deleteProduct(productId);
-	return productRepository.getProducts();
+	return productService.deleteProduct(productId);
     }
 
     @PostMapping("products/add")
-    public List<Product> addProduct(@RequestBody NewProduct newProduct) {
-	productRepository.addProduct(newProduct);
-	return productRepository.getProducts();
+    public List<Product> addProduct(@RequestBody Product product) {
+	return productService.addProduct(product);
     }
 
     @PutMapping("products/edit")
-    public List<Product> editProduct(@RequestBody Product product) {
-	productRepository.replaceProduct(product);
-	return productRepository.getProducts();
+    public List<Product> updateProduct(@RequestBody Product product) {
+	return productService.addProduct(product);
     }
 
 }

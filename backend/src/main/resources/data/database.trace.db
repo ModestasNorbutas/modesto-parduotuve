@@ -1,0 +1,9 @@
+2022-01-09 18:16:58 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "PRODUCTS" not found; SQL statement:
+select product0_.id as id1_0_, product0_.description as descript2_0_, product0_.image_url as image_ur3_0_, product0_.name as name4_0_, product0_.price as price5_0_, product0_.quantity as quantity6_0_ from products product0_ [42102-200]
+2022-01-09 18:18:42 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "PRODUCTS" not found; SQL statement:
+select product0_.id as id1_0_, product0_.description as descript2_0_, product0_.image_url as image_ur3_0_, product0_.name as name4_0_, product0_.price as price5_0_, product0_.quantity as quantity6_0_ from products product0_ [42102-200]
+2022-01-09 18:19:27 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "PRODUCTS" not found; SQL statement:
+insert into products (id, description, image_url, name, price, quantity) values (null, ?, ?, ?, ?, ?) [42102-200]
