@@ -12,20 +12,23 @@ export default function HomeItem(props) {
   const { cartItems, setCartItems } = useContext(CartContext);
   const { id, imageUrl, name, description, price } = props.product;
 
-  const isInCart = cartItems.filter(item => item.productId === props.product.id).length > 0 ? true : false;
+  const cartItem = cartItems.filter(item => item.product.id === id)[0] || 0;
+  const isInCart = cartItem ? true : false;
 
-  const cartItem = {
+  const cartRequest = {
+    "username": user.username,
+    "itemId": cartItem.id,
     "productId": id,
-    "quantity": 1
+    "quantity": cartItem.quantity
   }
 
   function addRemoveItem() {
     if (isInCart) {
-      axios.delete(`http://localhost:8080/${user.username}/${id}`)
+      axios.delete(`http://localhost:8080/api/cart/delete`, { data: cartRequest })
         .then(response => setCartItems(response.data))
         .catch(error => alert(error));
     } else {
-      axios.post(`http://localhost:8080/${user.username}/cart`, cartItem)
+      axios.post(`http://localhost:8080/api/cart/add`, cartRequest)
         .then(response => setCartItems(response.data))
         .catch(error => alert(error));
     }

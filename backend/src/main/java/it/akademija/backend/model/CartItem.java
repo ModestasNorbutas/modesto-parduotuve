@@ -1,28 +1,59 @@
 package it.akademija.backend.model;
 
-import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+@Entity
+@Table(name = "cart_items")
 public class CartItem {
 
-    private Integer productId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
     private Integer quantity;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "username")
+    private User user;
 
     public CartItem() {
 
     }
 
-    public CartItem(Integer productId, Integer quantity) {
+    public CartItem(Integer id, Integer quantity, Product product, User user) {
 	super();
-	this.productId = productId;
+	this.id = id;
 	this.quantity = quantity;
+	this.product = product;
+	this.user = user;
     }
 
-    public Integer getProductId() {
-	return productId;
+    public CartItem(Product product, User user) {
+	super();
+	this.quantity = 1;
+	this.product = product;
+	this.user = user;
     }
 
-    public void setProductId(Integer productId) {
-	this.productId = productId;
+    public Integer getId() {
+	return id;
+    }
+
+    public void setId(Integer id) {
+	this.id = id;
     }
 
     public Integer getQuantity() {
@@ -33,21 +64,20 @@ public class CartItem {
 	this.quantity = quantity;
     }
 
-    @Override
-    public int hashCode() {
-	return Objects.hash(productId, quantity);
+    public Product getProduct() {
+	return product;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	CartItem other = (CartItem) obj;
-	return Objects.equals(productId, other.productId) && Objects.equals(quantity, other.quantity);
+    public void setProduct(Product product) {
+	this.product = product;
+    }
+
+    public User getUser() {
+	return user;
+    }
+
+    public void setUser(User user) {
+	this.user = user;
     }
 
 }

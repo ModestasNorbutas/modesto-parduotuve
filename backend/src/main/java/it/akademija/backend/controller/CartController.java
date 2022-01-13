@@ -1,12 +1,8 @@
 package it.akademija.backend.controller;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,93 +13,36 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.akademija.backend.dto.CartRequest;
 import it.akademija.backend.model.CartItem;
+import it.akademija.backend.service.CartService;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/")
+@RequestMapping("api/")
 public class CartController {
 
-    private Map<String, LinkedHashSet<CartItem>> userCarts;
+    @Autowired
+    private CartService cartService;
 
-    public CartController() {
-	this.userCarts = new ConcurrentHashMap<>();
+    @PostMapping("cart/add")
+    public List<CartItem> addItem(@RequestBody CartRequest request) {
+	return cartService.addItem(request);
     }
 
-    @GetMapping("{username}/cart")
-    public List<CartItem> getCart(@PathVariable String username) {
-	return new ArrayList<>(userCarts.getOrDefault(username, new LinkedHashSet<>()));
+    @PutMapping("cart/edit")
+    public List<CartItem> editItem(@RequestBody CartRequest request) {
+	return cartService.editItem(request);
     }
 
-    @PostMapping("{username}/cart")
-    public List<CartItem> addToCart(@PathVariable String username, @RequestBody CartItem cartItem) {
-	LinkedHashSet<CartItem> currentItems = userCarts.getOrDefault(username, new LinkedHashSet<>());
-	currentItems.add(cartItem);
-	userCarts.put(username, currentItems);
-	return getCart(username);
+    @GetMapping("cart/{username}")
+    public List<CartItem> getItems(@PathVariable String username) {
+	return cartService.getItems(username);
     }
 
-    @PutMapping("{username}/cart")
-    public List<CartItem> editCart(@PathVariable String username, @RequestBody CartItem cartItem) {
-	LinkedHashSet<CartItem> currentItems = userCarts.getOrDefault(username, new LinkedHashSet<>());
-	currentItems = currentItems.stream()
-				   .map(item -> {
-				       if (item.getProductId()
-					       .equals(cartItem.getProductId())) {
-					   return cartItem;
-				       } else {
-					   return item;
-				       }
-				   })
-				   .collect(Collectors.toCollection(LinkedHashSet::new));
-	userCarts.put(username, currentItems);
-	return getCart(username);
-    }
-
-    @DeleteMapping("{username}/{productId}")
-    public List<CartItem> removeFromCart(@PathVariable String username, @PathVariable Integer productId) {
-	LinkedHashSet<CartItem> currentItems = userCarts.getOrDefault(username, new LinkedHashSet<>());
-	currentItems = currentItems.stream()
-				   .filter(item -> !item.getProductId()
-							.equals(productId))
-				   .collect(Collectors.toCollection(LinkedHashSet::new));
-	userCarts.put(username, currentItems);
-	return getCart(username);
+    @DeleteMapping("cart/delete")
+    public List<CartItem> deleteItem(@RequestBody CartRequest request) {
+	return cartService.deleteItem(request);
     }
 
 }
-
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//    
-//
-//

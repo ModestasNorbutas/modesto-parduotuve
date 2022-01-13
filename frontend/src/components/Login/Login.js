@@ -22,11 +22,13 @@ export default function Login() {
   }
 
   function handleLogin() {
-    axios.post(`http://localhost:8080/api/user/login/${formData.username}`, formData.password,
-      { headers: { "Content-Type": "text/plain" } })
+    axios.post(`http://localhost:8080/api/user/login`, formData)
       .then(response => {
         if (response.data.success) {
-          return saveUser(response.data.response);
+          return saveUser({
+            "username": response.data.response.username,
+            "password": response.data.response.password
+          });
         } else {
           return alert(response.data.error);
         }
@@ -38,7 +40,10 @@ export default function Login() {
     axios.post("http://localhost:8080/api/user/signup", formData)
       .then(response => {
         if (response.data.success) {
-          return saveUser(response.data.response);
+          return saveUser({
+            "username": response.data.response.username,
+            "password": response.data.response.password
+          });
         } else {
           return alert(response.data.error);
         }

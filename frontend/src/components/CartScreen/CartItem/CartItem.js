@@ -16,22 +16,28 @@ export default function CartItem(props) {
     let value = parseInt(event.target.value);
     if (value < 0) {
       setChosenQty(0);
-    } else if (value > props.product.quantity) {
-      setChosenQty(props.product.quantity);
+    } else if (value > props.item.product.quantity) {
+      setChosenQty(props.item.product.quantity);
     } else {
       setChosenQty(value);
     }
   }
 
+  const cartRequest = {
+    "username": user.username,
+    "itemId": props.item.id,
+    "productId": props.item.product.id,
+    "quantity": chosenQty
+  }
+
   function updateQuantity() {
-    let newCartItem = { "productId": props.item.productId, "quantity": chosenQty };
-    axios.put(`http://localhost:8080/${user.username}/cart`, newCartItem)
+    axios.put(`http://localhost:8080/api/cart/edit`, cartRequest)
       .then(response => setCartItems(response.data))
       .catch(error => alert(error));
   }
 
   function removeItem() {
-    axios.delete(`http://localhost:8080/${user.username}/${props.item.productId}`)
+    axios.delete(`http://localhost:8080/api/cart/delete`, { data: cartRequest })
       .then(response => setCartItems(response.data))
       .catch(error => alert(error));
   }
@@ -41,12 +47,12 @@ export default function CartItem(props) {
       <td className="align-middle">
         <img
           className="cart-item--image"
-          src={props.product.imageUrl}
-          alt={props.product.name}
+          src={props.item.product.imageUrl}
+          alt={props.item.product.name}
         />
       </td>
-      <td className="align-middle">{props.product.name}</td>
-      <td className="align-middle">{props.product.quantity}</td>
+      <td className="align-middle">{props.item.product.name}</td>
+      <td className="align-middle">{props.item.product.quantity}</td>
       <td className="align-middle">
         <div className="quantity-container">
           {props.item.quantity}
@@ -63,8 +69,8 @@ export default function CartItem(props) {
           >Ok</button>
         </div>
       </td>
-      <td className="align-middle">{props.product.price.toFixed(2)} &euro;</td>
-      <td className="align-middle">{(props.product.price * props.item.quantity).toFixed(2)} &euro;</td>
+      <td className="align-middle">{props.item.product.price.toFixed(2)} &euro;</td>
+      <td className="align-middle">{(props.item.product.price * props.item.quantity).toFixed(2)} &euro;</td>
       <th className="align-middle">
         <Button
           onClick={removeItem}

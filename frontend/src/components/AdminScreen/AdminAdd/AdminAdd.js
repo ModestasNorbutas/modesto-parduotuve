@@ -12,6 +12,7 @@ export default function AdminAdd() {
   const { setProducts } = useContext(ProductContext);
 
   const [formData, setFormData] = useState({
+    "id": 0,
     "name": "",
     "imageUrl": "",
     "price": 0,

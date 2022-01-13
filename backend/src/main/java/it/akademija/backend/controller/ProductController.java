@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.akademija.backend.dto.ProductRequest;
 import it.akademija.backend.model.Product;
 import it.akademija.backend.service.ProductService;
 
@@ -25,7 +26,7 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("products")
-    public List<Product> getAllProducts() {
+    public List<ProductRequest> getAllProducts() {
 	return productService.getAllProducts();
     }
 
@@ -35,18 +36,18 @@ public class ProductController {
     }
 
     @DeleteMapping("products/{productId}")
-    public List<Product> deleteProduct(@PathVariable Integer productId) {
+    public List<ProductRequest> deleteProduct(@PathVariable Integer productId) {
 	return productService.deleteProduct(productId);
     }
 
     @PostMapping("products/add")
-    public List<Product> addProduct(@RequestBody Product product) {
-	return productService.addProduct(product);
+    public List<ProductRequest> addProduct(@RequestBody ProductRequest request) {
+	return productService.addProduct(request);
     }
 
     @PutMapping("products/edit")
-    public List<Product> updateProduct(@RequestBody Product product) {
-	return productService.addProduct(product);
+    public List<ProductRequest> editProduct(@RequestBody ProductRequest request) {
+	return productService.editProduct(request);
     }
 
 }

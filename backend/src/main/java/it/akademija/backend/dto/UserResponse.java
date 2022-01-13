@@ -1,16 +1,16 @@
-package it.akademija.backend.model;
+package it.akademija.backend.dto;
 
-public class ResponseBody {
+public class UserResponse {
 
     private boolean success;
     private Object response;
     private String error;
 
-    public ResponseBody() {
+    public UserResponse() {
 
     }
 
-    public ResponseBody(boolean success, Object response, String error) {
+    public UserResponse(boolean success, Object response, String error) {
 	super();
 	this.success = success;
 	this.response = response;

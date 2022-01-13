@@ -16,8 +16,8 @@ export default function App() {
 
   return (
     <UserProvider>
-      <CartProvider>
-        <ProductProvider>
+      <ProductProvider>
+        <CartProvider>
           <BrowserRouter>
             <NavigationBar />
             <Switch>
@@ -29,8 +29,8 @@ export default function App() {
               <Route exact path="/cart" component={CartScreen} />
             </Switch>
           </BrowserRouter>
-        </ProductProvider>
-      </CartProvider>
+        </CartProvider>
+      </ProductProvider>
     </UserProvider>
   )
 }

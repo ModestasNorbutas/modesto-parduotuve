@@ -1,27 +1,41 @@
 package it.akademija.backend.model;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "USERS")
+@Table(name = "users")
 public class User {
 
     @Id
     private String username;
     private String password;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartItem> cartItems = new ArrayList<>();
+
     public User() {
-	super();
+
     }
 
     public User(String username, String password) {
 	super();
 	this.username = username;
 	this.password = password;
+    }
+
+    public List<CartItem> getCartItems() {
+	return cartItems;
+    }
+
+    public void setCartItems(List<CartItem> cartItems) {
+	this.cartItems = cartItems;
     }
 
     public String getUsername() {
@@ -38,23 +52,6 @@ public class User {
 
     public void setPassword(String password) {
 	this.password = password;
-    }
-
-    @Override
-    public int hashCode() {
-	return Objects.hash(password, username);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	User other = (User) obj;
-	return Objects.equals(password, other.password) && Objects.equals(username, other.username);
     }
 
 }

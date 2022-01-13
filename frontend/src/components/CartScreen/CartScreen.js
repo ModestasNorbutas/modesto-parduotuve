@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import { Container, Table, Row, Card } from "react-bootstrap";
 import "./CartScreen.css";
 
-import { ProductContext } from "../Context/ProductContext";
 import { UserContext } from "../Context/UserContext";
 import { CartContext } from "../Context/CartContext";
 import CartItem from "./CartItem/CartItem";
@@ -10,25 +9,14 @@ import CartItem from "./CartItem/CartItem";
 export default function CartScreen() {
 
   const { cartItems } = useContext(CartContext);
-  const { products } = useContext(ProductContext);
   const { user } = useContext(UserContext);
-
-  let emptyProduct = {
-    "id": 0,
-    "name": "Item is not available",
-    "imageUrl": "",
-    "price": 0,
-    "quantity": 0,
-    "description": "Item is not available"
-  }
 
   let totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   let itemsPrice = cartItems
-    .map(item => (products.find(product => product.id === item.productId) || emptyProduct).price)
+    .map(item => item.product.price)
     .reduce((sum, price) => sum + price, 0).toFixed(2);
   let totalPrice = cartItems
-    .map(item => item.quantity * (products
-      .find(product => product.id === item.productId) || emptyProduct).price || 0)
+    .map(item => item.quantity * item.product.price)
     .reduce((sum, price) => sum + price, 0).toFixed(2);
 
   return (
@@ -51,9 +39,8 @@ export default function CartScreen() {
             <tbody>
               {cartItems.map(item =>
                 <CartItem
-                  key={item.productId}
+                  key={item.id}
                   item={item}
-                  product={products.find(product => product.id === item.productId) || emptyProduct}
                 />
               )}
               <tr>
